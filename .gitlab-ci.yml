@@ -1,0 +1,16 @@
+stages:
+    - build
+    - publish
+build:
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1
+    stage: build
+    script:
+        - dotnet build "project/project.csproj" -c Release
+        
+push_registry:
+    stage: publish
+    before_script:
+        - docker info
+    script:
+        - mv "project/Dockerfile" ./Dockerfile
+        - docker build --tag project:latest .
